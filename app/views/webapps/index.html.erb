@@ -1,6 +1,6 @@
 <!-- Search and Filter Controls -->
-<header class="flex justify-between items-center mb-2 px-6" role="search">
-  <form method="get" class="flex items-center gap-4 w-full">
+<header class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2 px-3 sm:px-6 gap-4 w-full" role="search">
+  <form method="get" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full">
     <label for="search-input" class="sr-only">Search applications</label>
     <input 
       id="search-input"
@@ -8,10 +8,10 @@
       name="search" 
       placeholder="Search apps..." 
       value="<%= params[:search] %>" 
-      class="w-64 px-4 py-2 rounded-lg border border-gray-600 bg-gray-900 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+      class="w-full sm:w-64 px-4 py-2 rounded-lg border border-gray-600 bg-gray-900 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
       aria-label="Search applications">
     
-    <div class="flex gap-4 ml-auto">
+    <div class="flex flex-wrap gap-2 sm:gap-4 sm:ml-auto">
       <button 
         type="button" 
         onclick="openHelpModal()" 
@@ -72,11 +72,11 @@
 </header>
 
 <!-- Apps Container -->
-<main class="apps-container border border-gray-600 rounded-xl bg-gray-900 p-6 overflow-y-auto" style="height: 525px;" role="main" aria-label="Applications directory">
-  <section class="grid gap-6" id="apps-grid" aria-label="Applications grid">
+<main class="apps-container border border-gray-600 rounded-xl bg-gray-900 p-3 sm:p-6 overflow-y-auto flex-1 w-full" style="max-height: calc(100vh - 400px);" role="main" aria-label="Applications directory">
+  <section class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6" id="apps-grid" aria-label="Applications grid">
   <% @webapps.each do |app| %>
     <article 
-      class="card border border-gray-600 rounded-lg p-6 bg-gray-800 text-white text-center hover:bg-gray-700 transition-colors flex flex-col cursor-pointer" 
+      class="card border border-gray-600 rounded-lg p-3 sm:p-6 bg-gray-800 text-white text-center hover:bg-gray-700 transition-colors flex flex-col cursor-pointer" 
       data-app-id="<%= app.id %>" 
       data-app-name="<%= app.name %>" 
       data-app-url="<%= app.url %>" 
@@ -91,12 +91,12 @@
         <img 
           src="<%= app.icon_url %>" 
           alt="<%= app.name %> icon" 
-          class="w-16 h-16 mb-4 flex-shrink-0" 
+          class="w-12 h-12 sm:w-16 sm:h-16 mb-3 sm:mb-4 flex-shrink-0" 
           style="background: transparent;"
           loading="lazy"
           decoding="async"
           onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMzc0MTUxIi8+CjxwYXRoIGQ9Ik0zMiAyMEMyNi40NzcgMjAgMjIgMjQuNDc3IDIyIDMwQzIyIDM1LjUyMyAyNi40NzcgNDAgMzIgNDBDMzcuNTIzIDQwIDQyIDM1LjUyMyA0MiAzMEM0MiAyNC40NzcgMzcuNTIzIDIwIDMyIDIwWiIgZmlsbD0iIzZCNzI4MCIvPgo8L3N2Zz4K'">
-        <h3 class="text-lg font-semibold truncate px-2 app-name"><%= app.name %></h3>
+        <h3 class="text-sm sm:text-lg font-semibold truncate px-2 app-name"><%= app.name %></h3>
       </div>
     </article>
   <% end %>
@@ -174,31 +174,35 @@
           <button onclick="closeHelpModal()" class="text-gray-400 hover:text-white text-3xl font-light">&times;</button>
         </div>
         <div class="text-white space-y-6">
-          <div class="bg-gray-900 rounded-lg p-4">
-            <h3 class="font-semibold text-lg mb-3 text-blue-400">1. Download Files</h3>
-            <div class="space-y-2">
-              <a href="https://raw.githubusercontent.com/HowieDuhzit/omarchy/ChromiumWebAppInstaller/bin/omarchy-webapp-handler" 
-                 class="block px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors">
-                📥 omarchy-webapp-handler
-              </a>
-              <a href="https://raw.githubusercontent.com/HowieDuhzit/omarchy/ChromiumWebAppInstaller/bin/omarchy-webapp-handler.desktop" 
-                 class="block px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors">
-                📥 omarchy-webapp-handler.desktop
-              </a>
-            </div>
-          </div>
+                  <div class="bg-gray-900 rounded-lg p-4">
+                    <h3 class="font-semibold text-lg mb-3 text-blue-400">1. Download Files</h3>
+                    <div class="space-y-2">
+                      <a href="https://raw.githubusercontent.com/HowieDuhzit/omarchy/refs/heads/ChromiumWebAppInstaller/bin/omarchy-install-handler"
+                         download="omarchy-install-handler"
+                         class="block px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors">
+                        📥 omarchy-install-handler
+                      </a>
+                      <a href="https://raw.githubusercontent.com/HowieDuhzit/omarchy/refs/heads/ChromiumWebAppInstaller/applications/omarchy-install-handler.desktop"
+                         download="omarchy-install-handler.desktop"
+                         class="block px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors">
+                        📥 omarchy-install-handler.desktop
+                      </a>
+                    </div>
+                  </div>
           
-          <div class="bg-gray-900 rounded-lg p-4">
-            <h3 class="font-semibold text-lg mb-3 text-green-400">2. Register Handler</h3>
-            <div class="bg-black rounded-lg p-4 font-mono text-sm">
-              <div class="text-gray-300">chmod +x ~/Downloads/omarchy-webapp-handler</div>
-              <div class="text-gray-300">mkdir -p ~/.local/bin ~/.local/share/applications</div>
-              <div class="text-gray-300">mv ~/Downloads/omarchy-webapp-handler ~/.local/bin/</div>
-              <div class="text-gray-300">mv ~/Downloads/omarchy-webapp-handler.desktop ~/.local/share/applications/</div>
-              <div class="text-gray-300">xdg-mime default omarchy-webapp-handler.desktop x-scheme-handler/omarchy</div>
-              <div class="text-gray-300">update-desktop-database ~/.local/share/applications || true</div>
-            </div>
-          </div>
+                  <div class="bg-gray-900 rounded-lg p-4">
+                    <h3 class="font-semibold text-lg mb-3 text-green-400">2. Register Handler</h3>
+                    <div class="bg-black rounded-lg p-4 font-mono text-sm">
+                      <div class="text-gray-300">chmod +x ~/Downloads/omarchy-install-handler</div>
+                      <div class="text-gray-300">mkdir -p ~/.local/bin ~/.local/share/applications</div>
+                      <div class="text-gray-300">mv ~/Downloads/omarchy-install-handler ~/.local/bin/</div>
+                      <div class="text-gray-300">mv ~/Downloads/omarchy-install-handler.desktop ~/.local/share/applications/</div>
+                      <div class="text-gray-300">echo "# Handle custom Omarchy installer links" >> ~/.local/share/mime/packages/omarchy.xml</div>
+                      <div class="text-gray-300">echo "xdg-mime default omarchy-install-handler.desktop x-scheme-handler/omarchy" >> ~/.local/share/mime/packages/omarchy.xml</div>
+                      <div class="text-gray-300">xdg-mime default omarchy-install-handler.desktop x-scheme-handler/omarchy</div>
+                      <div class="text-gray-300">update-desktop-database ~/.local/share/applications || true</div>
+                    </div>
+                  </div>
           
           <div class="bg-gray-900 rounded-lg p-4 border-l-4 border-yellow-500">
             <p class="text-gray-300 text-sm">
