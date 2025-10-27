@@ -26,3 +26,4 @@ services:
 volumes:
   app_data:
   app_logs:
+

@@ -175,3 +175,4 @@ namespace :db do
     puts "Database optimized"
   end
 end
+

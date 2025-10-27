@@ -39,3 +39,4 @@ class DebugController < ApplicationController
     false
   end
 end
+
