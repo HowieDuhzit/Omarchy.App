@@ -22,6 +22,9 @@ Rails.application.configure do
   config.active_record.database_selector = nil
   config.active_record.database_resolver = nil
   config.active_record.database_resolver_context = nil
+  
+  # Disable SQLite production warning since we're intentionally using SQLite
+  config.active_record.sqlite3_production_warning = false
 
   # Content Security Policy
   config.content_security_policy do |policy|
@@ -41,11 +44,4 @@ Rails.application.configure do
 
   # Session configuration
   config.session_store :cookie_store, key: '_omarchy_directory_session', secure: true, httponly: true, same_site: :lax
-  
-  # Additional security headers
-  config.force_ssl = true unless ENV['RAILS_FORCE_SSL'] == 'false'
-  
-  # Performance optimizations
-  config.active_record.query_log_tags_enabled = false
-  config.active_record.cache_query_log = false
 end

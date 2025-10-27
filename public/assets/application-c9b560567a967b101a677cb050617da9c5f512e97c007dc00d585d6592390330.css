@@ -1,0 +1,149 @@
+/* Omarchy Directory Application Styles */
+/* Production-ready CSS for the Omarchy WebApp Directory */
+
+/* Custom scrollbar for apps container */
+.apps-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.apps-container::-webkit-scrollbar-track {
+  background: #374151;
+  border-radius: 4px;
+}
+
+.apps-container::-webkit-scrollbar-thumb {
+  background: #6B7280;
+  border-radius: 4px;
+}
+
+.apps-container::-webkit-scrollbar-thumb:hover {
+  background: #9CA3AF;
+}
+
+/* Fixed card sizing - cards stay same size, grid adapts */
+.card {
+  width: 200px !important;
+  height: 200px !important;
+  min-width: 200px !important;
+  max-width: 200px !important;
+  min-height: 200px !important;
+  max-height: 200px !important;
+  flex-shrink: 0;
+}
+
+/* Responsive grid that adapts to container width */
+#apps-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, 200px);
+  justify-content: center;
+  grid-auto-rows: 200px;
+}
+
+/* App name color */
+.app-name {
+  color: #759BEC;
+}
+
+/* Modal animations */
+.modal-enter {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.modal-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
+}
+
+.modal-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.modal-exit-active {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 200ms ease-in, transform 200ms ease-in;
+}
+
+/* Notification animations */
+.notification-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.notification-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 300ms ease-out, transform 300ms ease-out;
+}
+
+.notification-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.notification-exit-active {
+  opacity: 0;
+  transform: translateX(100%);
+  transition: opacity 300ms ease-in, transform 300ms ease-in;
+}
+
+/* Focus states for accessibility */
+button:focus,
+input:focus,
+select:focus {
+  outline: 2px solid #3B82F6;
+  outline-offset: 2px;
+}
+
+/* Loading spinner */
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive design improvements */
+@media (max-width: 768px) {
+  .card {
+    width: 160px !important;
+    height: 160px !important;
+    min-width: 160px !important;
+    max-width: 160px !important;
+    min-height: 160px !important;
+    max-height: 160px !important;
+  }
+  
+  #apps-grid {
+    grid-template-columns: repeat(auto-fit, 160px);
+    gap: 16px;
+    grid-auto-rows: 160px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    width: 140px !important;
+    height: 140px !important;
+    min-width: 140px !important;
+    max-width: 140px !important;
+    min-height: 140px !important;
+    max-height: 140px !important;
+  }
+  
+  #apps-grid {
+    grid-template-columns: repeat(auto-fit, 140px);
+    gap: 12px;
+    grid-auto-rows: 140px;
+  }
+}
