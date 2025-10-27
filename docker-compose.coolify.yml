@@ -1,6 +1,6 @@
 services:
   omarchy:
-    build: .
+    image: howieduhzit/omarchy-apps:latest
     environment:
       - RAILS_ENV=production
       - PORT=3000
