@@ -17,6 +17,7 @@ test:
 
 production:
   <<: *default
+  url: <%= ENV.fetch("DATABASE_URL", "") %>
   database: <%= ENV.fetch("PGDATABASE", "omarchy_directory_production") %>
   username: <%= ENV.fetch("PGUSER", "omarchy") %>
   password: <%= ENV.fetch("PGPASSWORD", "") %>

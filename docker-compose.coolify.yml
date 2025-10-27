@@ -45,8 +45,6 @@ services:
 
   redis:
     image: redis:7-alpine
-    environment:
-      - REDIS_PASSWORD=${SERVICE_PASSWORD_REDIS}
     volumes:
       - redis_data:/data
     restart: unless-stopped
