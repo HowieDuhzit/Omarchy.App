@@ -41,10 +41,5 @@ Rails.application.configure do
   config.content_security_policy_report_only = false
 
   # Session configuration - using cookie store for simplicity
-  config.session_store :cookie_store, {
-    key: '_omarchy_directory_session',
-    secure: true,
-    httponly: true,
-    same_site: :strict
-  }
+  config.session_store :cookie_store, key: '_omarchy_directory_session'
 end
