@@ -11,15 +11,19 @@
       class="w-full sm:w-64 px-4 py-2 rounded-lg border border-gray-600 bg-gray-900 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
       aria-label="Search applications">
     
-    <div class="flex flex-wrap gap-2 sm:gap-4 sm:ml-auto">
-      <button 
-        type="button" 
-        onclick="openHelpModal()" 
-        class="px-4 py-2 rounded-lg border border-gray-600 bg-gray-900 text-white hover:bg-gray-700 transition-colors font-bold text-lg"
-        aria-label="Open help and setup information"
-        title="Help & Setup">
-        ?
-      </button>
+     <div class="flex flex-wrap gap-2 sm:gap-4 sm:ml-auto items-center">
+       <div class="flex items-center gap-2 text-sm text-gray-400">
+         <span>Install this first</span>
+         <span class="text-lg">→</span>
+       </div>
+       <button 
+         type="button" 
+         onclick="openHelpModal()" 
+         class="px-4 py-2 rounded-lg border border-gray-600 bg-gray-900 text-white hover:bg-gray-700 transition-colors font-bold text-lg"
+         aria-label="Open help and setup information"
+         title="Help & Setup">
+         ?
+       </button>
       <button 
         type="button" 
         onclick="openModal()" 
@@ -175,33 +179,24 @@
         </div>
         <div class="text-white space-y-6">
                   <div class="bg-gray-900 rounded-lg p-4">
-                    <h3 class="font-semibold text-lg mb-3 text-blue-400">1. Download Files</h3>
-                    <div class="space-y-2">
-                      <a href="https://raw.githubusercontent.com/HowieDuhzit/omarchy/refs/heads/ChromiumWebAppInstaller/bin/omarchy-install-handler"
-                         download="omarchy-install-handler"
-                         class="block px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors">
-                        📥 omarchy-install-handler
-                      </a>
-                      <a href="https://raw.githubusercontent.com/HowieDuhzit/omarchy/refs/heads/ChromiumWebAppInstaller/applications/omarchy-install-handler.desktop"
-                         download="omarchy-install-handler.desktop"
-                         class="block px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors">
-                        📥 omarchy-install-handler.desktop
-                      </a>
-                    </div>
-                  </div>
-          
-                  <div class="bg-gray-900 rounded-lg p-4">
-                    <h3 class="font-semibold text-lg mb-3 text-green-400">2. Register Handler</h3>
-                    <div class="bg-black rounded-lg p-4 font-mono text-sm">
-                      <div class="text-gray-300">chmod +x ~/Downloads/omarchy-install-handler</div>
-                      <div class="text-gray-300">mkdir -p ~/.local/bin ~/.local/share/applications</div>
-                      <div class="text-gray-300">mv ~/Downloads/omarchy-install-handler ~/.local/bin/</div>
-                      <div class="text-gray-300">mv ~/Downloads/omarchy-install-handler.desktop ~/.local/share/applications/</div>
-                      <div class="text-gray-300">echo "# Handle custom Omarchy installer links" >> ~/.local/share/mime/packages/omarchy.xml</div>
-                      <div class="text-gray-300">echo "xdg-mime default omarchy-install-handler.desktop x-scheme-handler/omarchy" >> ~/.local/share/mime/packages/omarchy.xml</div>
-                      <div class="text-gray-300">xdg-mime default omarchy-install-handler.desktop x-scheme-handler/omarchy</div>
-                      <div class="text-gray-300">update-desktop-database ~/.local/share/applications || true</div>
-                    </div>
+                    <h3 class="font-semibold text-lg mb-3 text-green-400">Copy & Paste Installation</h3>
+                     <div class="bg-black rounded-lg p-4 font-mono text-sm overflow-x-auto">
+                       <div class="text-gray-300">#!/bin/bash</div>
+                       <div class="text-gray-300">set -e</div>
+                       <div class="text-gray-300">B="https://raw.githubusercontent.com/HowieDuhzit/omarchy/refs/heads/ChromiumWebAppInstaller"</div>
+                       <div class="text-gray-300">mkdir -p ~/.local/{bin,share/{applications,mime/packages}}</div>
+                       <div class="text-gray-300">curl -s "$B/bin/omarchy-install-handler" -o ~/.local/bin/omarchy-install-handler</div>
+                       <div class="text-gray-300">curl -s "$B/applications/omarchy-install-handler.desktop" -o ~/.local/share/applications/omarchy-install-handler.desktop</div>
+                       <div class="text-gray-300">chmod +x ~/.local/bin/omarchy-install-handler</div>
+                       <div class="text-gray-300">echo '<?xml version="1.0"?><mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info"><mime-type type="x-scheme-handler/omarchy"><comment>Omarchy Installer</comment><glob pattern="omarchy:*"/></mime-type></mime-info>' > ~/.local/share/mime/packages/omarchy.xml 2>/dev/null</div>
+                       <div class="text-gray-300">xdg-mime default omarchy-install-handler.desktop x-scheme-handler/omarchy</div>
+                       <div class="text-gray-300">update-desktop-database ~/.local/share/applications 2>/dev/null</div>
+                       <div class="text-gray-300">update-mime-database ~/.local/share/mime 2>/dev/null || true</div>
+                       <div class="text-gray-300">echo "✅ Done!"</div>
+                     </div>
+                    <p class="text-gray-300 text-sm mt-3">
+                      <strong class="text-green-400">Instructions:</strong> Copy the entire script above, paste it into a terminal, and press Enter. The script will automatically download and install everything needed for Omarchy web app installation.
+                    </p>
                   </div>
           
           <div class="bg-gray-900 rounded-lg p-4 border-l-4 border-yellow-500">
