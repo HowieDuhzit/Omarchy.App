@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-if [[ $# -lt 1 ]]; then echo "Usage: omarchy-webapp-handler omarchy://webappinstall?name=...&url=...&icon=..."; exit 1; fi
+if [[ $# -lt 1 ]]; then echo "Usage: omarchy-install-handler omarchy://webappinstall?name=...&url=...&icon=..."; exit 1; fi
 URI="$1"
 case "$URI" in omarchy://webappinstall*|omarchy://install*);; * ) echo "Unsupported URI"; exit 1;; esac
 urldecode(){ local d="${1//+/ }"; printf '%b' "${d//%/\\x}"; }

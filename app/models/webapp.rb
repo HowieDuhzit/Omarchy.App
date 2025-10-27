@@ -29,10 +29,10 @@ class Webapp < ApplicationRecord
     # Special handling for specific apps
     case name.downcase
     when "hey"
-      params[:exec] = "omarchy-webapp-handler-hey %u"
+      params[:exec] = "omarchy-install-handler %u"
       params[:mimeTypes] = "x-scheme-handler/mailto"
     when "zoom"
-      params[:exec] = "omarchy-webapp-handler-zoom %u"
+      params[:exec] = "omarchy-install-handler %u"
       params[:mimeTypes] = "x-scheme-handler/zoommtg;x-scheme-handler/zoomus"
     end
 

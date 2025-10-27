@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Omarchy Webapp Installer
 Comment=Handles omarchy:// install links
-Exec=omarchy-webapp-handler %u
+Exec=omarchy-install-handler %u
 Terminal=false
 Type=Application
 NoDisplay=true

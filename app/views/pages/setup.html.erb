@@ -2,16 +2,16 @@
 <ol>
   <li>Download files:
     <ul>
-      <li><a href="/downloads/omarchy-webapp-handler">omarchy-webapp-handler</a></li>
-      <li><a href="/downloads/omarchy-webapp-handler.desktop">omarchy-webapp-handler.desktop</a></li>
+      <li><a href="/downloads/omarchy-install-handler">omarchy-install-handler</a></li>
+      <li><a href="/downloads/omarchy-install-handler.desktop">omarchy-install-handler.desktop</a></li>
     </ul>
   </li>
   <li>Register handler:
-<pre>chmod +x ~/Downloads/omarchy-webapp-handler
+<pre>chmod +x ~/Downloads/omarchy-install-handler
 mkdir -p ~/.local/bin ~/.local/share/applications
-mv ~/Downloads/omarchy-webapp-handler ~/.local/bin/
-mv ~/Downloads/omarchy-webapp-handler.desktop ~/.local/share/applications/
-xdg-mime default omarchy-webapp-handler.desktop x-scheme-handler/omarchy
+mv ~/Downloads/omarchy-install-handler ~/.local/bin/
+mv ~/Downloads/omarchy-install-handler.desktop ~/.local/share/applications/
+xdg-mime default omarchy-install-handler.desktop x-scheme-handler/omarchy
 update-desktop-database ~/.local/share/applications || true</pre>
   </li>
   <li>Test:
