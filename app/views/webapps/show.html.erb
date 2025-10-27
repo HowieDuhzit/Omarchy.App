@@ -1,0 +1,12 @@
+<h1 class="h1"><%= @webapp.name %></h1>
+<p class="muted"><%= @webapp.url %></p>
+
+<div class="actions" style="margin:12px 0">
+  <%= link_to "Open", @webapp.url, target: "_blank", rel: "noopener", class: "btn" %>
+  <%= link_to "Install", install_webapp_path(@webapp), class: "btn primary" %>
+  <%= link_to "Edit", edit_webapp_path(@webapp), class: "btn" %>
+  <%= link_to "Back", webapps_path, class: "btn" %>
+  </div>
+
+<h3>CLI fallback</h3>
+<pre>omarchy-webapp-install "<%= @webapp.name %>" "<%= @webapp.url %>" "<%= @webapp.icon_url %>"</pre>

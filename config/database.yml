@@ -1,0 +1,23 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
+  username: <%= ENV.fetch("PGUSER", "omarchy") %>
+  password: <%= ENV.fetch("PGPASSWORD", "omarchy") %>
+  host: <%= ENV.fetch("PGHOST", "localhost") %>
+  port: <%= ENV.fetch("PGPORT", 5432) %>
+
+development:
+  <<: *default
+  database: omarchy_directory_development
+
+test:
+  <<: *default
+  database: omarchy_directory_test
+
+production:
+  <<: *default
+  database: <%= ENV.fetch("PGDATABASE", "omarchy_directory_production") %>
+  username: <%= ENV.fetch("PGUSER", "omarchy") %>
+  password: <%= ENV.fetch("PGPASSWORD", "") %>
+

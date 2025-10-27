@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - RAILS_ENV=production
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD}@db:5432/omarchy_directory_production
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - APP_HOST=${APP_HOST:-omarchy.app}
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./tmp/pids:/app/tmp/pids
+      - ./log:/app/log
+    restart: unless-stopped
+    command: >
+      sh -c "
+        bundle exec rails db:migrate &&
+        bundle exec rails assets:precompile &&
+        bundle exec rails server -b 0.0.0.0 -p 3000 -e production
+      "
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=omarchy_directory_production
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backups:/backups
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+      - ./public:/var/www/public:ro
+    depends_on:
+      - web
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:

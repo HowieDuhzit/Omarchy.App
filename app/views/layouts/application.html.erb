@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Omarchy WebApp Directory</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="<%= form_authenticity_token %>">
+    <meta name="admin-password" content="<%= @admin_password %>">
+    <link rel="icon" type="image/png" href="https://omarchy.org/assets/images/favicon.png">
+    <% app_host = ENV["APP_HOST"] || "omarchy.app" %>
+    <link rel="canonical" href="https://<%= app_host %><%= request.fullpath %>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+  </head>
+  <body class="text-white h-screen overflow-hidden" style="background-color: #1A1B26;">
+    <div class="max-w-full mx-auto px-6 py-8 h-full flex flex-col">
+      <!-- ASCII Art -->
+      <div class="text-center">
+        <a href="/" class="no-underline">
+          <pre class="text-green-400 text-sm leading-tight font-mono tracking-tight inline-block" style="color: #9ECE6A; line-height: 0.9; letter-spacing: -0.5px; text-align: left;">
+ ▄██████▄    ▄▄▄▄███▄▄▄▄      ▄████████    ▄████████  ▄████████    ▄█    █▄    ▄██   ▄
+███    ███ ▄██▀▀▀███▀▀▀██▄   ███    ███   ███    ███ ███    ███   ███    ███   ███   ██▄
+███    ███ ███   ███   ███   ███    ███   ███    ███ ███    █▀    ███    ███   ███▄▄▄███
+███    ███ ███   ███   ███   ███    ███  ▄███▄▄▄▄██▀ ███         ▄███▄▄▄▄███▄▄ ▀▀▀▀▀▀███
+███    ███ ███   ███   ███ ▀███████████ ▀▀███▀▀▀▀▀   ███        ▀▀███▀▀▀▀███▀  ▄██   ███
+███    ███ ███   ███   ███   ███    ███ ▀███████████ ███    █▄    ███    ███   ███   ███
+███    ███ ███   ███   ███   ███    ███   ███    ███ ███    ███   ███    ███   ███   ███
+ ▀██████▀   ▀█   ███   █▀    ███    █▀    ███    ███ ████████▀    ███    █▀     ▀█████▀
+                                          ███    ███
+
+                       ▄████████    ▄███████▄    ▄███████▄    ▄████████
+                      ███    ███   ███    ███   ███    ███   ███    ███
+                      ███    ███   ███    ███   ███    ███   ███    █▀
+                      ███    ███   ███    ███   ███    ███   ███
+                    ▀███████████ ▀█████████▀  ▀█████████▀  ▀███████████
+                      ███    ███   ███          ███                 ███
+                      ███    ███   ███          ███           ▄█    ███
+                      ███    █▀   ▄████▀       ▄████▀       ▄████████▀
+          </pre>
+        </a>
+      </div>
+
+      <!-- Main Content -->
+      <main class="flex-1 flex flex-col">
+        <% if notice %>
+          <div class="bg-gray-800 border border-gray-600 rounded-lg p-4 text-gray-300 mb-6">
+            <%= notice %>
+          </div>
+        <% end %>
+        
+        <%= yield %>
+        
+        <!-- Footer -->
+        <footer class="mt-2 pt-3 border-t border-gray-800 text-center text-gray-400 flex flex-col justify-center items-center">
+          <p>Omarchy.Apps brought to you by <a href="https://SleepyStudio.xyz" class="text-blue-400 hover:text-blue-300">Sleepy Studio</a></p>
+          <p>Omarchy brought to you by <a href="https://37signals.com/" class="text-blue-400 hover:text-blue-300">37Signals</a></p>
+        </footer>
+      </main>
+    </div>
+  </body>
+  </html>

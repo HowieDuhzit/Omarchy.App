@@ -1,0 +1,270 @@
+<!-- Search and Filter Controls -->
+<header class="flex justify-between items-center mb-2 px-6" role="search">
+  <form method="get" class="flex items-center gap-4 w-full">
+    <label for="search-input" class="sr-only">Search applications</label>
+    <input 
+      id="search-input"
+      type="text" 
+      name="search" 
+      placeholder="Search apps..." 
+      value="<%= params[:search] %>" 
+      class="w-64 px-4 py-2 rounded-lg border border-gray-600 bg-gray-900 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+      aria-label="Search applications">
+    
+    <div class="flex gap-4 ml-auto">
+      <button 
+        type="button" 
+        onclick="openHelpModal()" 
+        class="px-4 py-2 rounded-lg border border-gray-600 bg-gray-900 text-white hover:bg-gray-700 transition-colors font-bold text-lg"
+        aria-label="Open help and setup information"
+        title="Help & Setup">
+        ?
+      </button>
+      <button 
+        type="button" 
+        onclick="openModal()" 
+        class="px-4 py-2 rounded-lg border border-gray-600 bg-gray-900 text-white hover:bg-gray-700 transition-colors font-bold text-lg"
+        aria-label="Add new application"
+        title="Add New App">
+        +
+      </button>
+      
+      <label for="category-filter" class="sr-only">Filter by category</label>
+      <select 
+        id="category-filter"
+        name="filter" 
+        class="px-4 py-2 rounded-lg border border-gray-600 bg-gray-900 text-white focus:outline-none focus:border-blue-500" 
+        onchange="this.form.submit()"
+        aria-label="Filter applications by category">
+      <option value="">All Categories</option>
+      <option value="communication" <%= 'selected' if params[:filter] == 'communication' %>>Communication</option>
+      <option value="project_management" <%= 'selected' if params[:filter] == 'project_management' %>>Project Management</option>
+      <option value="development" <%= 'selected' if params[:filter] == 'development' %>>Development</option>
+      <option value="design" <%= 'selected' if params[:filter] == 'design' %>>Design</option>
+      <option value="notes" <%= 'selected' if params[:filter] == 'notes' %>>Notes & Tasks</option>
+      <option value="google" <%= 'selected' if params[:filter] == 'google' %>>Google Services</option>
+      <option value="social" <%= 'selected' if params[:filter] == 'social' %>>Social Media</option>
+      <option value="entertainment" <%= 'selected' if params[:filter] == 'entertainment' %>>Entertainment</option>
+      <option value="games" <%= 'selected' if params[:filter] == 'games' %>>Games</option>
+      <option value="ai_tools" <%= 'selected' if params[:filter] == 'ai_tools' %>>AI & Tools</option>
+      <option value="finance" <%= 'selected' if params[:filter] == 'finance' %>>Finance</option>
+      <option value="cloud_storage" <%= 'selected' if params[:filter] == 'cloud_storage' %>>Cloud Storage</option>
+      <option value="hosting" <%= 'selected' if params[:filter] == 'hosting' %>>Hosting & DevOps</option>
+      <option value="education" <%= 'selected' if params[:filter] == 'education' %>>Education</option>
+      <option value="news" <%= 'selected' if params[:filter] == 'news' %>>News & Reading</option>
+      <option value="health" <%= 'selected' if params[:filter] == 'health' %>>Health & Fitness</option>
+    </select>
+    
+      <label for="sort-filter" class="sr-only">Sort applications</label>
+      <select 
+        id="sort-filter"
+        name="sort" 
+        class="px-4 py-2 rounded-lg border border-gray-600 bg-gray-900 text-white focus:outline-none focus:border-blue-500" 
+        onchange="this.form.submit()"
+        aria-label="Sort applications">
+        <option value="name" <%= 'selected' if params[:sort] == 'name' || params[:sort].blank? %>>Name A-Z</option>
+        <option value="name_desc" <%= 'selected' if params[:sort] == 'name_desc' %>>Name Z-A</option>
+        <option value="created_at" <%= 'selected' if params[:sort] == 'created_at' %>>Newest First</option>
+        <option value="created_at_desc" <%= 'selected' if params[:sort] == 'created_at_desc' %>>Oldest First</option>
+      </select>
+    </div>
+  </form>
+</header>
+
+<!-- Apps Container -->
+<main class="apps-container border border-gray-600 rounded-xl bg-gray-900 p-6 overflow-y-auto" style="height: 525px;" role="main" aria-label="Applications directory">
+  <section class="grid gap-6" id="apps-grid" aria-label="Applications grid">
+  <% @webapps.each do |app| %>
+    <article 
+      class="card border border-gray-600 rounded-lg p-6 bg-gray-800 text-white text-center hover:bg-gray-700 transition-colors flex flex-col cursor-pointer" 
+      data-app-id="<%= app.id %>" 
+      data-app-name="<%= app.name %>" 
+      data-app-url="<%= app.url %>" 
+      data-app-icon="<%= app.icon_url %>" 
+      data-app-category="<%= app.category %>"
+      onclick="showAppDetailsModal(this)"
+      role="button"
+      tabindex="0"
+      aria-label="<%= app.name %> - <%= app.category&.humanize || 'Uncategorized' %>"
+      onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showAppDetailsModal(this)}">
+      <div class="flex-1 flex flex-col justify-center items-center">
+        <img 
+          src="<%= app.icon_url %>" 
+          alt="<%= app.name %> icon" 
+          class="w-16 h-16 mb-4 flex-shrink-0" 
+          style="background: transparent;"
+          loading="lazy">
+        <h3 class="text-lg font-semibold truncate px-2 app-name"><%= app.name %></h3>
+      </div>
+    </article>
+  <% end %>
+  </section>
+</main>
+
+<!-- Add App Modal -->
+<div 
+  id="addAppModal" 
+  class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50" 
+  role="dialog" 
+  aria-modal="true" 
+  aria-labelledby="addAppModalTitle"
+  aria-hidden="true">
+  <div class="bg-gray-800 rounded-lg p-6 w-96 max-w-md mx-4">
+    <div class="flex justify-between items-center mb-4">
+      <h2 id="addAppModalTitle" class="text-xl font-semibold text-white">Add New App</h2>
+      <button 
+        onclick="closeModal()" 
+        class="text-gray-400 hover:text-white text-2xl"
+        aria-label="Close add app modal">
+        &times;
+      </button>
+    </div>
+    
+    <%= form_with model: Webapp.new, local: true, class: "space-y-4" do |form| %>
+      <div>
+        <%= form.label :name, "App Name", class: "block text-sm font-medium text-gray-300 mb-2" %>
+        <%= form.text_field :name, class: "w-full px-3 py-2 rounded-lg border border-gray-600 bg-gray-900 text-white focus:outline-none focus:border-blue-500", placeholder: "e.g., My App", required: true %>
+      </div>
+      
+      <div>
+        <%= form.label :url, "App URL", class: "block text-sm font-medium text-gray-300 mb-2" %>
+        <%= form.url_field :url, class: "w-full px-3 py-2 rounded-lg border border-gray-600 bg-gray-900 text-white focus:outline-none focus:border-blue-500", placeholder: "https://example.com", required: true %>
+      </div>
+      
+                      <div>
+                        <%= form.label :icon_url, "Icon URL", class: "block text-sm font-medium text-gray-300 mb-2" %>
+                        <%= form.url_field :icon_url, class: "w-full px-3 py-2 rounded-lg border border-gray-600 bg-gray-900 text-white focus:outline-none focus:border-blue-500", placeholder: "https://example.com/icon.png", required: true %>
+                      </div>
+                      <div>
+                        <%= form.label :category, "Category", class: "block text-sm font-medium text-gray-300 mb-2" %>
+                        <%= form.select :category, options_for_select([
+                          ['Communication', 'communication'],
+                          ['Project Management', 'project_management'],
+                          ['Development', 'development'],
+                          ['Design', 'design'],
+                          ['Notes & Tasks', 'notes'],
+                          ['Google Services', 'google'],
+                          ['Social Media', 'social'],
+                          ['Entertainment', 'entertainment'],
+                          ['Games', 'games'],
+                          ['AI & Tools', 'ai_tools'],
+                          ['Finance', 'finance'],
+                          ['Cloud Storage', 'cloud_storage'],
+                          ['Hosting & DevOps', 'hosting'],
+                          ['Education', 'education'],
+                          ['News & Reading', 'news'],
+                          ['Health & Fitness', 'health']
+                        ]), { prompt: 'Select a category' }, { class: "w-full px-3 py-2 rounded-lg border border-gray-600 bg-gray-900 text-white focus:outline-none focus:border-blue-500", required: true } %>
+                      </div>
+                      <div class="flex gap-3 pt-4">
+        <%= form.submit "Add App", class: "flex-1 px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors" %>
+        <button type="button" onclick="closeModal()" class="flex-1 px-4 py-2 rounded-lg border border-gray-600 text-white hover:bg-gray-700 transition-colors">Cancel</button>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+      <div class="bg-gray-800 rounded-xl p-8 w-full max-w-2xl mx-4 shadow-2xl">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-white">Omarchy Installer Setup</h2>
+          <button onclick="closeHelpModal()" class="text-gray-400 hover:text-white text-3xl font-light">&times;</button>
+        </div>
+        <div class="text-white space-y-6">
+          <div class="bg-gray-900 rounded-lg p-4">
+            <h3 class="font-semibold text-lg mb-3 text-blue-400">1. Download Files</h3>
+            <div class="space-y-2">
+              <a href="https://raw.githubusercontent.com/HowieDuhzit/omarchy/ChromiumWebAppInstaller/bin/omarchy-webapp-handler" 
+                 class="block px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors">
+                📥 omarchy-webapp-handler
+              </a>
+              <a href="https://raw.githubusercontent.com/HowieDuhzit/omarchy/ChromiumWebAppInstaller/bin/omarchy-webapp-handler.desktop" 
+                 class="block px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors">
+                📥 omarchy-webapp-handler.desktop
+              </a>
+            </div>
+          </div>
+          
+          <div class="bg-gray-900 rounded-lg p-4">
+            <h3 class="font-semibold text-lg mb-3 text-green-400">2. Register Handler</h3>
+            <div class="bg-black rounded-lg p-4 font-mono text-sm">
+              <div class="text-gray-300">chmod +x ~/Downloads/omarchy-webapp-handler</div>
+              <div class="text-gray-300">mkdir -p ~/.local/bin ~/.local/share/applications</div>
+              <div class="text-gray-300">mv ~/Downloads/omarchy-webapp-handler ~/.local/bin/</div>
+              <div class="text-gray-300">mv ~/Downloads/omarchy-webapp-handler.desktop ~/.local/share/applications/</div>
+              <div class="text-gray-300">xdg-mime default omarchy-webapp-handler.desktop x-scheme-handler/omarchy</div>
+              <div class="text-gray-300">update-desktop-database ~/.local/share/applications || true</div>
+            </div>
+          </div>
+          
+          <div class="bg-gray-900 rounded-lg p-4 border-l-4 border-yellow-500">
+            <p class="text-gray-300 text-sm">
+              <strong class="text-yellow-400">Note:</strong> These files are from the 
+              <a href="https://github.com/HowieDuhzit/omarchy/tree/ChromiumWebAppInstaller" 
+                 class="text-blue-400 hover:text-blue-300 underline">ChromiumWebAppInstaller branch</a> 
+              until changes are merged into the main Omarchy repository.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!-- App Details Modal -->
+<div 
+  id="appDetailsModal" 
+  class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50" 
+  role="dialog" 
+  aria-modal="true" 
+  aria-labelledby="appDetailsModalTitle"
+  aria-hidden="true">
+  <div class="bg-gray-800 rounded-xl p-8 w-full max-w-lg mx-4 shadow-2xl">
+    <div class="flex justify-between items-center mb-6">
+      <h2 id="appDetailsModalTitle" class="text-2xl font-bold text-white">App Details</h2>
+      <button 
+        onclick="closeAppDetailsModal()" 
+        class="text-gray-400 hover:text-white text-3xl font-light"
+        aria-label="Close app details modal">
+        &times;
+      </button>
+    </div>
+    <div class="text-white space-y-4">
+      <div class="flex items-center space-x-4">
+        <img id="modalAppIcon" src="" alt="App icon" class="w-16 h-16 rounded-lg" style="background: transparent;">
+        <div>
+          <h3 class="text-xl font-semibold" id="modalAppTitle"></h3>
+          <p class="text-gray-400 text-sm" id="modalAppCategory"></p>
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-2">URL</label>
+        <p class="text-gray-400 text-sm break-all" id="modalAppUrl"></p>
+      </div>
+      <div class="flex gap-3 pt-4">
+        <a id="modalAppOpenLink" href="#" target="_blank" class="flex-1 px-4 py-3 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors text-center">Open App</a>
+        <a id="modalAppInstallLink" href="#" class="flex-1 px-4 py-3 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors text-center">Install</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Password Modal -->
+<div id="adminModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+  <div class="bg-gray-800 rounded-xl p-8 w-full max-w-md mx-4 shadow-2xl">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-white">Admin Access</h2>
+          <button onclick="closeAdminModal()" class="text-gray-400 hover:text-white text-3xl font-light">&times;</button>
+        </div>
+        <div class="text-white space-y-4">
+          <div>
+            <label for="adminPassword" class="block text-sm font-medium text-gray-300 mb-2">Enter Admin Password</label>
+            <input type="password" id="adminPassword" class="w-full px-4 py-3 rounded-lg border border-gray-600 bg-gray-900 text-white focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500" placeholder="Password" autocomplete="off">
+          </div>
+          <div class="flex gap-3 pt-4">
+            <button onclick="authenticateAdmin()" class="flex-1 px-4 py-3 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition-colors">Authenticate</button>
+            <button onclick="closeAdminModal()" class="flex-1 px-4 py-3 rounded-lg border border-gray-600 text-white hover:bg-gray-700 transition-colors">Cancel</button>
+          </div>
+        </div>
+  </div>
+</div>
+
