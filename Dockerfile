@@ -14,6 +14,7 @@ RUN apt-get update -qq \
     nodejs \
     npm \
     ca-certificates \
+    redis-tools \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get clean
 
@@ -58,6 +59,7 @@ RUN apt-get update -qq \
     postgresql-client \
     curl \
     ca-certificates \
+    redis-tools \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get clean
 
