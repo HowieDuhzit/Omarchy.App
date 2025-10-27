@@ -40,6 +40,5 @@ Rails.application.configure do
   # Configure CSP reporting
   config.content_security_policy_report_only = false
 
-  # Session configuration - using cookie store for simplicity
-  config.session_store :cookie_store, key: '_omarchy_directory_session'
+  # Session configuration - using Rails defaults
 end
