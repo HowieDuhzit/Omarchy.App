@@ -3,19 +3,20 @@ set -euo pipefail
 
 : "${RAILS_ENV:=production}"
 
+echo "[entrypoint] DATABASE_URL: ${DATABASE_URL:-NOT_SET}"
+echo "[entrypoint] SERVICE_URL_POSTGRES: ${SERVICE_URL_POSTGRES:-NOT_SET}"
+
 # Use DATABASE_URL if provided (Coolify magic variable)
 if [ -n "${DATABASE_URL:-}" ]; then
   echo "[entrypoint] Using provided DATABASE_URL"
   export DATABASE_URL
+elif [ -n "${SERVICE_URL_POSTGRES:-}" ]; then
+  echo "[entrypoint] Using SERVICE_URL_POSTGRES as DATABASE_URL"
+  export DATABASE_URL="${SERVICE_URL_POSTGRES}"
 else
-  # Fallback to individual variables
-  : "${PGHOST:=postgres}"
-  : "${PGPORT:=5432}"
-  : "${PGUSER:=postgres}"
-  : "${PGPASSWORD:=password}"
-  : "${PGDATABASE:=omarchy_directory_production}"
-  
-  export DATABASE_URL="postgresql://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}"
+  echo "[entrypoint] No database URL provided, skipping database operations"
+  echo "[entrypoint] Starting: $*"
+  exec "$@"
 fi
 
 echo "[entrypoint] Checking gems..."
