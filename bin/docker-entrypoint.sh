@@ -25,6 +25,13 @@ echo "[entrypoint] Final DATABASE_URL: ${DATABASE_URL}"
 echo "[entrypoint] Checking gems..."
 bundle check
 
+echo "[entrypoint] Waiting for PostgreSQL to be ready..."
+until pg_isready -h postgres -p 5432 -U postgres >/dev/null 2>&1; do
+  echo "[entrypoint] Waiting for PostgreSQL..."
+  sleep 2
+done
+echo "[entrypoint] PostgreSQL is ready!"
+
 echo "[entrypoint] Preparing database..."
 # Ensure binstubs are executable when bind-mounted from host
 chmod +x bin/rails bin/rake || true
