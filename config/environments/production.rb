@@ -41,8 +41,12 @@ Rails.application.configure do
   config.content_security_policy_report_only = false
 
   # Session configuration
-  config.session_store :redis_store, {
-    servers: [{ host: ENV['REDIS_HOST'] || 'localhost', port: ENV['REDIS_PORT'] || 6379, db: 1 }],
+  config.session_store :redis_session_store, {
+    redis: {
+      host: ENV['REDIS_HOST'] || 'localhost',
+      port: ENV['REDIS_PORT'] || 6379,
+      db: 1
+    },
     expire_after: 1.week,
     key: '_omarchy_directory_session',
     secure: true,
