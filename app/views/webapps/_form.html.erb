@@ -22,6 +22,27 @@
     <%= form.label :icon_url, "Icon URL" %>
     <%= form.url_field :icon_url, required: true %>
   </div>
+  <div class="field">
+    <%= form.label :category, "Category" %>
+    <%= form.select :category, options_for_select([
+      ['Communication', 'communication'],
+      ['Project Management', 'project_management'],
+      ['Development', 'development'],
+      ['Design', 'design'],
+      ['Notes & Tasks', 'notes'],
+      ['Google Services', 'google'],
+      ['Social Media', 'social'],
+      ['Entertainment', 'entertainment'],
+      ['Games', 'games'],
+      ['AI & Tools', 'ai_tools'],
+      ['Finance', 'finance'],
+      ['Cloud Storage', 'cloud_storage'],
+      ['Hosting & DevOps', 'hosting'],
+      ['Education', 'education'],
+      ['News & Reading', 'news'],
+      ['Health & Fitness', 'health']
+    ]), { prompt: 'Select a category' }, { required: true } %>
+  </div>
   <div class="actions">
     <%= form.submit "Save", class: "btn primary" %>
   </div>

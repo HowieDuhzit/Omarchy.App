@@ -10,6 +10,12 @@ Rails.application.routes.draw do
   # Health check endpoint for Coolify
   get '/health', to: 'application#health'
   
+  # Debug endpoints (only in development)
+  if Rails.env.development?
+    get '/debug', to: 'debug#index'
+    get '/debug/error', to: 'debug#error_test'
+  end
+  
   # API endpoint
   get '/webapps.json', to: 'webapps#index', defaults: { format: :json }
   

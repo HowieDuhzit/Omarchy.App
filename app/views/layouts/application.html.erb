@@ -11,7 +11,7 @@
     <link rel="canonical" href="https://<%= app_host %><%= request.fullpath %>">
     <script src="https://cdn.tailwindcss.com"></script>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
   <body class="text-white h-screen overflow-hidden" style="background-color: #1A1B26;">
     <div class="max-w-full mx-auto px-6 py-8 h-full flex flex-col">

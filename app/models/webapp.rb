@@ -2,7 +2,7 @@ require "uri"
 
 class Webapp < ApplicationRecord
   # Validations
-  validates :name, presence: true, length: { maximum: 100 }
+  validates :name, presence: true, length: { maximum: 100 }, uniqueness: { case_sensitive: false }
   validates :url, presence: true, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "must be a valid HTTP/HTTPS URL" }
   validates :icon_url, presence: true, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "must be a valid HTTP/HTTPS URL" }
   validates :category, presence: true, inclusion: { 
@@ -16,6 +16,8 @@ class Webapp < ApplicationRecord
   scope :search_by_category, ->(term) { where("category ILIKE ?", "%#{term}%") }
   scope :ordered_by_name, -> { order(:name) }
   scope :ordered_by_created, -> { order(created_at: :desc) }
+  scope :recent, -> { order(created_at: :desc) }
+  scope :popular, -> { order(:name) } # Could be enhanced with usage tracking
 
   # Callbacks
   before_save :normalize_urls

@@ -174,3 +174,5 @@ apps.each do |a|
     w.category = a[:category]
   end
 end
+
+puts "Seeded #{Webapp.count} webapps"

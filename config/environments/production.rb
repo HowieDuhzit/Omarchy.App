@@ -1,6 +1,6 @@
 Rails.application.configure do
-  # Force SSL in production
-  config.force_ssl = true
+  # Force SSL in production (can be overridden by RAILS_FORCE_SSL env var)
+  config.force_ssl = ENV.fetch('RAILS_FORCE_SSL', 'true') == 'true'
 
   # Use simple memory cache store (no Redis needed)
   config.cache_store = :memory_store
@@ -10,35 +10,42 @@ Rails.application.configure do
   config.assets.digest = true
   config.assets.enabled = true
 
-  # Logging configuration
-  config.log_level = :info
+  # Logging configuration - enable debug logging for troubleshooting
+  config.log_level = ENV.fetch('RAILS_LOG_LEVEL', 'info').to_sym
   config.log_formatter = ::Logger::Formatter.new
 
   # Performance optimizations
   config.eager_load = true
   config.cache_classes = true
 
-  # Security headers
-  config.force_ssl = true
-
-  # Database connection pool
-  config.active_record.database_selector = { delay: 2.seconds }
-  config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
-  config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
+  # Database connection pool - simple configuration for single database
+  config.active_record.database_selector = nil
+  config.active_record.database_resolver = nil
+  config.active_record.database_resolver_context = nil
 
   # Content Security Policy
   config.content_security_policy do |policy|
     policy.default_src :self, :https
     policy.font_src    :self, :https, :data
-    policy.img_src     :self, :https, :data, "https://omarchy.app"
+    policy.img_src     :self, :https, :data, "https://omarchy.app", "https://omarchy.org"
     policy.object_src  :none
-    policy.script_src  :self, :https, "https://cdn.tailwindcss.com"
+    policy.script_src  :self, :https, :unsafe_inline, "https://cdn.tailwindcss.com"
     policy.style_src   :self, :https, :unsafe_inline
     policy.connect_src :self, :https, "https://api.allorigins.win"
+    policy.frame_src   :none
+    policy.base_uri    :self
   end
 
   # Configure CSP reporting
   config.content_security_policy_report_only = false
 
-  # Session configuration - using Rails defaults
+  # Session configuration
+  config.session_store :cookie_store, key: '_omarchy_directory_session', secure: true, httponly: true, same_site: :lax
+  
+  # Additional security headers
+  config.force_ssl = true unless ENV['RAILS_FORCE_SSL'] == 'false'
+  
+  # Performance optimizations
+  config.active_record.query_log_tags_enabled = false
+  config.active_record.cache_query_log = false
 end

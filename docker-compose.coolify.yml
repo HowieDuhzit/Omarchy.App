@@ -5,21 +5,24 @@ services:
       - RAILS_ENV=production
       - PORT=3000
       - SERVICE_FQDN_OMARCHY_3000
-      - DATABASE_URL=${SERVICE_URL_POSTGRES}
       - SECRET_KEY_BASE=${SERVICE_PASSWORD_SECRET_KEY}
       - ADMIN_PASSWORD=${SERVICE_PASSWORD_ADMIN}
       - APP_HOST=${SERVICE_FQDN_OMARCHY}
+      - RAILS_SERVE_STATIC_FILES=true
+      - RAILS_LOG_TO_STDOUT=true
+      - RAILS_LOG_LEVEL=info
+      - RAILS_FORCE_SSL=false
     volumes:
-      - app_data:/app/tmp
+      - app_data:/app/db
       - app_logs:/app/log
-    depends_on:
-      - postgres
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
-  postgres:
-    image: postgres:15-alpine
-    environment:
-      - POSTGRES_DB=omarchy_directory_production
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=${SERVICE_PASSWORD_POSTGRES}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+volumes:
+  app_data:
+  app_logs:

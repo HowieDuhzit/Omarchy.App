@@ -11,9 +11,12 @@ class WebappsController < ApplicationController
     @webapps = apply_filter(@webapps) if params[:filter].present?
     @webapps = apply_sort(@webapps)
     
+    # Add pagination for large datasets
+    @webapps = @webapps.limit(100) if @webapps.count > 100
+    
     respond_to do |format|
       format.html
-      format.json { render json: { apps: @webapps.map(&:as_api) } }
+      format.json { render json: { apps: @webapps.map(&:as_api), total: @webapps.count } }
     end
   end
 
@@ -68,8 +71,18 @@ class WebappsController < ApplicationController
   end
 
   def authenticate_admin!
-    # This is a simple check - in production you'd want proper authentication
-    # For now, we'll rely on the frontend admin mode
+    # Simple admin authentication based on session or params
+    # In production, you'd want proper authentication
+    admin_password = ENV['ADMIN_PASSWORD'] || 'omarchy2024'
+    
+    # Check if admin is authenticated via session or params
+    unless session[:admin_authenticated] || params[:admin_password] == admin_password
+      redirect_to root_path, alert: "Admin access required"
+      return false
+    end
+    
+    # Set session for future requests
+    session[:admin_authenticated] = true
     true
   end
 

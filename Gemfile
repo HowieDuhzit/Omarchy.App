@@ -12,6 +12,8 @@ gem "dotenv-rails"
 # Production logging
 gem "lograge", "~> 0.14"
 
+gem "sqlite3"
+
 group :development do
   gem "web-console"
   gem "listen"

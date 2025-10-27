@@ -1,31 +1,18 @@
-version: '3.8'
-
 services:
   omarchy:
     build:
       context: .
-      dockerfile: Dockerfile.simple
+      dockerfile: Dockerfile
+      target: development
     ports:
       - "3001:3000"
     environment:
       - RAILS_ENV=production
-      - DATABASE_URL=postgresql://postgres:password@postgres:5432/omarchy_directory_production
       - SECRET_KEY_BASE=test_secret_key_base_for_local_testing_only
       - ADMIN_PASSWORD=admin123
       - APP_HOST=localhost
-    depends_on:
-      - postgres
-
-  postgres:
-    image: postgres:15-alpine
-    environment:
-      - POSTGRES_DB=omarchy_directory_production
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5433:5432"
+      - ./db:/app/db
+      - ./log:/app/log
 
 volumes:
-  postgres_data:

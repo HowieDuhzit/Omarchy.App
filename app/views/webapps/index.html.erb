@@ -93,7 +93,9 @@
           alt="<%= app.name %> icon" 
           class="w-16 h-16 mb-4 flex-shrink-0" 
           style="background: transparent;"
-          loading="lazy">
+          loading="lazy"
+          decoding="async"
+          onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMzc0MTUxIi8+CjxwYXRoIGQ9Ik0zMiAyMEMyNi40NzcgMjAgMjIgMjQuNDc3IDIyIDMwQzIyIDM1LjUyMyAyNi40NzcgNDAgMzIgNDBDMzcuNTIzIDQwIDQyIDM1LjUyMyA0MiAzMEM0MiAyNC40NzcgMzcuNTIzIDIwIDMyIDIwWiIgZmlsbD0iIzZCNzI4MCIvPgo8L3N2Zz4K'">
         <h3 class="text-lg font-semibold truncate px-2 app-name"><%= app.name %></h3>
       </div>
     </article>

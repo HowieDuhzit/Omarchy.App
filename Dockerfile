@@ -5,8 +5,6 @@ FROM ruby:3.2-slim AS base
 RUN apt-get update -qq \
   && apt-get install -y --no-install-recommends \
     build-essential \
-    libpq-dev \
-    postgresql-client \
     libyaml-dev \
     git \
     curl \
@@ -15,6 +13,7 @@ RUN apt-get update -qq \
     npm \
     ca-certificates \
     redis-tools \
+    libsqlite3-dev \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get clean
 
@@ -55,13 +54,12 @@ FROM ruby:3.2-slim AS production
 # Install runtime dependencies and build tools for native extensions
 RUN apt-get update -qq \
   && apt-get install -y --no-install-recommends \
-    libpq-dev \
-    postgresql-client \
     curl \
     ca-certificates \
     redis-tools \
     build-essential \
     libyaml-dev \
+    libsqlite3-dev \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get clean
 
@@ -77,14 +75,15 @@ ENV BUNDLE_PATH=/bundle \
     RAILS_SERVE_STATIC_FILES=true \
     RAILS_LOG_TO_STDOUT=true
 
-# Copy gems from build stage
-COPY --from=build /bundle /bundle
+# Copy Gemfile and install production gems
+COPY Gemfile Gemfile.lock ./
+RUN bundle install --without development test
 
 # Copy application code
 COPY --from=build /app .
 
 # Create necessary directories
-RUN mkdir -p tmp/pids log public/assets
+RUN mkdir -p tmp/pids log public/assets db
 
 # Create non-root user for security
 RUN groupadd -r appuser && useradd -r -g appuser appuser
@@ -93,8 +92,11 @@ RUN groupadd -r appuser && useradd -r -g appuser appuser
 COPY bin/docker-entrypoint.sh /usr/bin/docker-entrypoint
 RUN chmod +x /usr/bin/docker-entrypoint
 
-# Switch to non-root user
+# Set proper permissions for directories
 RUN chown -R appuser:appuser /app
+RUN chmod -R 755 /app/tmp /app/log /app/db
+
+# Switch to non-root user
 USER appuser
 
 # Health check for production
