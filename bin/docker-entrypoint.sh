@@ -5,19 +5,22 @@ set -euo pipefail
 
 echo "[entrypoint] DATABASE_URL: ${DATABASE_URL:-NOT_SET}"
 echo "[entrypoint] SERVICE_URL_POSTGRES: ${SERVICE_URL_POSTGRES:-NOT_SET}"
+echo "[entrypoint] SERVICE_PASSWORD_POSTGRES: ${SERVICE_PASSWORD_POSTGRES:-NOT_SET}"
 
-# Use DATABASE_URL if provided (Coolify magic variable)
-if [ -n "${DATABASE_URL:-}" ]; then
-  echo "[entrypoint] Using provided DATABASE_URL"
+# Construct proper PostgreSQL connection string for internal use
+if [ -n "${SERVICE_PASSWORD_POSTGRES:-}" ]; then
+  echo "[entrypoint] Using internal PostgreSQL connection"
+  export DATABASE_URL="postgresql://postgres:${SERVICE_PASSWORD_POSTGRES}@postgres:5432/omarchy_directory_production"
+elif [ -n "${DATABASE_URL:-}" ] && [[ "${DATABASE_URL}" =~ ^postgresql:// ]]; then
+  echo "[entrypoint] Using provided PostgreSQL DATABASE_URL"
   export DATABASE_URL
-elif [ -n "${SERVICE_URL_POSTGRES:-}" ]; then
-  echo "[entrypoint] Using SERVICE_URL_POSTGRES as DATABASE_URL"
-  export DATABASE_URL="${SERVICE_URL_POSTGRES}"
 else
-  echo "[entrypoint] No database URL provided, skipping database operations"
+  echo "[entrypoint] No valid database configuration found, skipping database operations"
   echo "[entrypoint] Starting: $*"
   exec "$@"
 fi
+
+echo "[entrypoint] Final DATABASE_URL: ${DATABASE_URL}"
 
 echo "[entrypoint] Checking gems..."
 bundle check
