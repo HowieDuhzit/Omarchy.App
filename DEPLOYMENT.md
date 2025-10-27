@@ -26,6 +26,7 @@ This application is optimized for deployment using **Coolify** with **Nixpacks**
    APP_HOST=yourdomain.com
    RAILS_ENV=production
    ```
+   *Note: No DATABASE_URL needed - SQLite is used automatically*
 
 4. **Deploy**:
    - Coolify will automatically detect Rails + SQLite + Node.js
@@ -41,8 +42,9 @@ This application is optimized for deployment using **Coolify** with **Nixpacks**
 ### Database
 
 - Uses **SQLite** for simplicity and portability
-- Database file is automatically created and migrated
+- Database file automatically created in `/app/db/production.sqlite3`
 - 135+ webapps are pre-seeded with categories
+- No external database server required
 
 ### Features
 
