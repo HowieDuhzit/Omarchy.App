@@ -68,6 +68,15 @@ RUN apt-get update -qq \
 # Set working directory
 WORKDIR /app
 
+# Configure bundler for production
+ENV BUNDLE_PATH=/bundle \
+    BUNDLE_JOBS=4 \
+    BUNDLE_RETRY=3 \
+    BUNDLE_WITHOUT="development test" \
+    RAILS_ENV=production \
+    RAILS_SERVE_STATIC_FILES=true \
+    RAILS_LOG_TO_STDOUT=true
+
 # Copy gems from build stage
 COPY --from=build /bundle /bundle
 
