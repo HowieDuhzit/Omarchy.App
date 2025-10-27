@@ -3,14 +3,13 @@ NODE_ENV = "production"
 RAILS_ENV = "production"
 
 [phases.setup]
-nixPkgs = ["nodejs", "yarn", "postgresql", "sqlite"]
+nixPkgs = ["sqlite"]
 
 [phases.install]
 cmds = [
   "bundle config set --local deployment 'true'",
   "bundle config set --local without 'development test'",
-  "bundle install",
-  "npm install"
+  "bundle install"
 ]
 
 [phases.build]
