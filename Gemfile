@@ -12,9 +12,6 @@ gem "dotenv-rails"
 # Production logging
 gem "lograge", "~> 0.14"
 
-# Redis for caching and sessions
-gem "redis", "~> 5.0"
-
 group :development do
   gem "web-console"
   gem "listen"

@@ -6,7 +6,6 @@ services:
     environment:
       - RAILS_ENV=production
       - DATABASE_URL=${SERVICE_URL_POSTGRES}
-      - REDIS_URL=${SERVICE_URL_REDIS}
       - SECRET_KEY_BASE=${SERVICE_PASSWORD_SECRET_KEY}
       - ADMIN_PASSWORD=${SERVICE_PASSWORD_ADMIN}
       - APP_HOST=${SERVICE_FQDN_WEB}
@@ -22,7 +21,6 @@ services:
       - traefik.http.services.web.loadbalancer.server.port=3000
     depends_on:
       - postgres
-      - redis
     command: >
       sh -c "
         bundle exec rails db:migrate &&
@@ -43,19 +41,8 @@ services:
       - coolify.managed=true
       - coolify.type=database
 
-  redis:
-    image: redis:7-alpine
-    volumes:
-      - redis_data:/data
-    restart: unless-stopped
-    labels:
-      - coolify.managed=true
-      - coolify.type=cache
-
 volumes:
   postgres_data:
-    driver: local
-  redis_data:
     driver: local
   app_data:
     driver: local

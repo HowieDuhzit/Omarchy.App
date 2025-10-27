@@ -2,8 +2,8 @@ Rails.application.configure do
   # Force SSL in production
   config.force_ssl = true
 
-  # Use production cache store
-  config.cache_store = :redis_cache_store, { url: ENV['REDIS_URL'] || 'redis://localhost:6379/0' }
+  # Use simple memory cache store (no Redis needed)
+  config.cache_store = :memory_store
 
   # Enable asset compilation
   config.assets.compile = false
