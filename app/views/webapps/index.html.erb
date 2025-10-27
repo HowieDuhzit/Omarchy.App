@@ -1,3 +1,5 @@
+<!-- Main Content Container -->
+<div class="flex-1 flex flex-col">
 <!-- Search and Filter Controls -->
 <header class="flex justify-between items-center mb-2 px-6" role="search">
   <form method="get" class="flex items-center gap-4 w-full">
@@ -72,8 +74,8 @@
 </header>
 
 <!-- Apps Container -->
-<main class="apps-container border border-gray-600 rounded-xl bg-gray-900 p-6 overflow-y-auto" style="height: 525px;" role="main" aria-label="Applications directory">
-  <section class="grid gap-6" id="apps-grid" aria-label="Applications grid">
+<main class="apps-container border border-gray-600 rounded-xl bg-gray-900 p-6 flex-1 overflow-y-auto" role="main" aria-label="Applications directory">
+  <section class="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6" id="apps-grid" aria-label="Applications grid">
   <% @webapps.each do |app| %>
     <article 
       class="card border border-gray-600 rounded-lg p-6 bg-gray-800 text-white text-center hover:bg-gray-700 transition-colors flex flex-col cursor-pointer" 
@@ -270,3 +272,4 @@
   </div>
 </div>
 
+</div>

@@ -13,8 +13,8 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
-  <body class="text-white h-screen overflow-hidden" style="background-color: #1A1B26;">
-    <div class="max-w-full mx-auto px-6 py-8 h-full flex flex-col">
+  <body class="text-white min-h-screen flex flex-col" style="background-color: #1A1B26;">
+    <div class="max-w-full mx-auto px-6 py-8 flex-1 flex flex-col">
       <!-- ASCII Art -->
       <div class="text-center">
         <a href="/" class="no-underline">
@@ -50,13 +50,13 @@
         <% end %>
         
         <%= yield %>
-        
-        <!-- Footer -->
-        <footer class="mt-2 pt-3 border-t border-gray-800 text-center text-gray-400 flex flex-col justify-center items-center">
-          <p>Omarchy.Apps brought to you by <a href="https://SleepyStudio.xyz" class="text-blue-400 hover:text-blue-300">Sleepy Studio</a></p>
-          <p>Omarchy brought to you by <a href="https://37signals.com/" class="text-blue-400 hover:text-blue-300">37Signals</a></p>
-        </footer>
       </main>
     </div>
+    
+    <!-- Footer -->
+    <footer class="mt-auto pt-3 border-t border-gray-800 text-center text-gray-400 flex flex-col justify-center items-center">
+      <p>Omarchy.Apps brought to you by <a href="https://SleepyStudio.xyz" class="text-blue-400 hover:text-blue-300">Sleepy Studio</a></p>
+      <p>Omarchy brought to you by <a href="https://37signals.com/" class="text-blue-400 hover:text-blue-300">37Signals</a></p>
+    </footer>
   </body>
   </html>
