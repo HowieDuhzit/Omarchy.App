@@ -1,7 +1,7 @@
 [variables]
 NODE_ENV = "production"
 RAILS_ENV = "production"
-DATABASE_URL = "db/production.sqlite3"
+DATABASE_URL = "sqlite3:db/production.sqlite3"
 
 [phases.setup]
 nixPkgs = ["sqlite"]
@@ -17,9 +17,11 @@ cmds = [
 cmds = [
   "mkdir -p db",
   "chmod 755 db",
-  "bundle exec rails assets:precompile",
-  "bundle exec rails db:prepare",
-  "bundle exec rails db:seed"
+  "echo 'Setting up database...'",
+  "bundle exec rails db:create",
+  "bundle exec rails db:migrate",
+  "bundle exec rails db:seed",
+  "bundle exec rails assets:precompile"
 ]
 
 [start]
