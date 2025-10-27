@@ -1,6 +1,6 @@
 class WebappsController < ApplicationController
   before_action :set_webapp, only: %i[ show edit update destroy install ]
-  before_action :authenticate_admin!, only: %i[ create update destroy ]
+  before_action :authenticate_admin!, only: %i[ update destroy ]
   before_action :set_admin_password
 
   def index
