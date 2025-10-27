@@ -1,50 +1,14 @@
-version: '3.8'
-
 services:
-  web:
+  omarchy:
     build: .
     environment:
       - RAILS_ENV=production
+      - PORT=3000
+      - SERVICE_FQDN_OMARCHY_3000
       - DATABASE_URL=${SERVICE_URL_POSTGRES}
       - SECRET_KEY_BASE=${SERVICE_PASSWORD_SECRET_KEY}
       - ADMIN_PASSWORD=${SERVICE_PASSWORD_ADMIN}
-      - APP_HOST=${SERVICE_FQDN_WEB}
+      - APP_HOST=${SERVICE_FQDN_OMARCHY}
     volumes:
       - app_data:/app/tmp
       - app_logs:/app/log
-    restart: unless-stopped
-    labels:
-      - traefik.enable=true
-      - "traefik.http.routers.web.rule=Host(`${SERVICE_FQDN_WEB}`)"
-      - traefik.http.routers.web.entrypoints=http
-      - traefik.http.routers.web.entrypoints=https
-      - traefik.http.services.web.loadbalancer.server.port=3000
-    depends_on:
-      - postgres
-    command: >
-      sh -c "
-        bundle exec rails db:migrate &&
-        bundle exec rails assets:precompile &&
-        bundle exec rails server -b 0.0.0.0 -p 3000 -e production
-      "
-
-  postgres:
-    image: postgres:15-alpine
-    environment:
-      - POSTGRES_DB=omarchy_directory_production
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=${SERVICE_PASSWORD_POSTGRES}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    restart: unless-stopped
-    labels:
-      - coolify.managed=true
-      - coolify.type=database
-
-volumes:
-  postgres_data:
-    driver: local
-  app_data:
-    driver: local
-  app_logs:
-    driver: local
