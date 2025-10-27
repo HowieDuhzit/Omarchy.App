@@ -14,7 +14,6 @@ gem "lograge", "~> 0.14"
 
 # Redis for caching and sessions
 gem "redis", "~> 5.0"
-gem "redis-session-store"
 
 group :development do
   gem "web-console"
