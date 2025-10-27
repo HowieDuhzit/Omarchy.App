@@ -2,21 +2,21 @@
 set -euo pipefail
 
 : "${RAILS_ENV:=production}"
-: "${PGHOST:=postgres}"
-: "${PGPORT:=5432}"
-: "${PGUSER:=postgres}"
-: "${PGPASSWORD:=${SERVICE_PASSWORD_POSTGRES}}"
-: "${PGDATABASE:=omarchy_directory_production}"
 
-# Set database URL for Rails
-export DATABASE_URL="postgresql://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}"
-export RAILS_ENV PGHOST PGPORT PGUSER PGPASSWORD PGDATABASE
-
-echo "[entrypoint] Waiting for Postgres at ${PGHOST}:${PGPORT}..."
-until pg_isready -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" >/dev/null 2>&1; do
-  sleep 1
-done
-echo "[entrypoint] Postgres is ready."
+# Use DATABASE_URL if provided (Coolify magic variable)
+if [ -n "${DATABASE_URL:-}" ]; then
+  echo "[entrypoint] Using provided DATABASE_URL"
+  export DATABASE_URL
+else
+  # Fallback to individual variables
+  : "${PGHOST:=postgres}"
+  : "${PGPORT:=5432}"
+  : "${PGUSER:=postgres}"
+  : "${PGPASSWORD:=password}"
+  : "${PGDATABASE:=omarchy_directory_production}"
+  
+  export DATABASE_URL="postgresql://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}"
+fi
 
 echo "[entrypoint] Checking gems..."
 bundle check
