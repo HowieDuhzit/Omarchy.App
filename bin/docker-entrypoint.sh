@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-: "${RAILS_ENV:=development}"
-: "${PGHOST:=db}"
+: "${RAILS_ENV:=production}"
+: "${PGHOST:=postgres}"
 : "${PGPORT:=5432}"
-: "${PGUSER:=omarchy}"
-: "${PGPASSWORD:=omarchy}"
-: "${PGDATABASE:=omarchy_directory_development}"
+: "${PGUSER:=postgres}"
+: "${PGPASSWORD:=${SERVICE_PASSWORD_POSTGRES}}"
+: "${PGDATABASE:=omarchy_directory_production}"
+
+# Set database URL for Rails
+export DATABASE_URL="postgresql://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}"
 export RAILS_ENV PGHOST PGPORT PGUSER PGPASSWORD PGDATABASE
 
 echo "[entrypoint] Waiting for Postgres at ${PGHOST}:${PGPORT}..."
