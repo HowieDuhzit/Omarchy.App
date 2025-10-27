@@ -52,7 +52,7 @@ RUN bundle exec rails assets:precompile
 # Production stage
 FROM ruby:3.2-slim AS production
 
-# Install runtime dependencies only
+# Install runtime dependencies and build tools for native extensions
 RUN apt-get update -qq \
   && apt-get install -y --no-install-recommends \
     libpq-dev \
@@ -60,6 +60,8 @@ RUN apt-get update -qq \
     curl \
     ca-certificates \
     redis-tools \
+    build-essential \
+    libyaml-dev \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get clean
 

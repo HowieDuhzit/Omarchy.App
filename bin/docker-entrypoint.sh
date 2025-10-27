@@ -18,8 +18,8 @@ until pg_isready -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" >/dev/null 2>&1; do
 done
 echo "[entrypoint] Postgres is ready."
 
-echo "[entrypoint] Installing gems if needed..."
-bundle check || bundle install
+echo "[entrypoint] Checking gems..."
+bundle check
 
 echo "[entrypoint] Preparing database..."
 # Ensure binstubs are executable when bind-mounted from host
