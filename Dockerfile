@@ -77,12 +77,14 @@ RUN mkdir -p tmp/pids log public/assets
 
 # Create non-root user for security
 RUN groupadd -r appuser && useradd -r -g appuser appuser
-RUN chown -R appuser:appuser /app
-USER appuser
 
-# Copy entrypoint script
+# Copy entrypoint script and set permissions (before switching to non-root user)
 COPY bin/docker-entrypoint.sh /usr/bin/docker-entrypoint
 RUN chmod +x /usr/bin/docker-entrypoint
+
+# Switch to non-root user
+RUN chown -R appuser:appuser /app
+USER appuser
 
 # Health check for production
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
