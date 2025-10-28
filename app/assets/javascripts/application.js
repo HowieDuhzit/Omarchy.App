@@ -164,15 +164,34 @@ class OmarchyApp {
   }
 
   // Admin Functions
-  authenticateAdmin() {
+  async authenticateAdmin() {
     const password = document.getElementById('adminPassword')?.value;
-    if (password === this.adminPassword) {
-      this.adminMode = true;
-      this.closeModal('adminModal');
-      this.toggleAdminMode();
-      this.showNotification('Admin mode enabled', 'success');
-    } else {
-      this.showNotification('Invalid password', 'error');
+    
+    try {
+      const response = await fetch('/admin/authenticate', {
+        method: 'POST',
+        headers: {
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({ password: password })
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        this.adminMode = true;
+        this.closeModal('adminModal');
+        this.toggleAdminMode();
+        this.showNotification('Admin mode enabled', 'success');
+      } else {
+        this.showNotification(result.message || 'Invalid password', 'error');
+        document.getElementById('adminPassword').value = '';
+      }
+    } catch (error) {
+      console.error('Error authenticating with backend:', error);
+      this.showNotification('Authentication failed', 'error');
       document.getElementById('adminPassword').value = '';
     }
   }
@@ -209,7 +228,8 @@ class OmarchyApp {
           headers: {
             'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
             'Content-Type': 'application/json'
-          }
+          },
+          credentials: 'same-origin'
         });
 
         if (response.ok) {

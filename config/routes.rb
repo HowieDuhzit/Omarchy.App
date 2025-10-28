@@ -5,6 +5,9 @@ Rails.application.routes.draw do
     member { get :install }
   end
 
+  # Admin authentication endpoint
+  post "/admin/authenticate", to: "webapps#authenticate_admin"
+  
   get "/setup", to: "pages#setup"
   
   # Health check endpoint for Coolify

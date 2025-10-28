@@ -2,6 +2,8 @@ class WebappsController < ApplicationController
   before_action :set_webapp, only: %i[ show edit update destroy install ]
   before_action :authenticate_admin!, only: %i[ update destroy ]
   before_action :set_admin_password
+  skip_before_action :authenticate_admin!, only: [:authenticate_admin]
+  skip_before_action :verify_authenticity_token, only: [:authenticate_admin, :destroy]
 
   def index
     @webapps = Webapp.order(:name)
@@ -52,6 +54,17 @@ class WebappsController < ApplicationController
     redirect_to root_path, notice: "#{app_name} was successfully deleted."
   rescue ActiveRecord::RecordNotDestroyed => e
     redirect_to root_path, alert: "Failed to delete app: #{e.message}"
+  end
+
+  def authenticate_admin
+    admin_password = ENV['ADMIN_PASSWORD'] || 'omarchy2024'
+    
+    if params[:password] == admin_password
+      session[:admin_authenticated] = true
+      render json: { success: true, message: "Admin authenticated successfully" }
+    else
+      render json: { success: false, message: "Invalid password" }, status: :unauthorized
+    end
   end
 
   private

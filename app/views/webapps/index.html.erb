@@ -26,6 +26,14 @@
        </button>
       <button 
         type="button" 
+        onclick="openAdminModal()" 
+        class="px-4 py-2 rounded-lg border border-gray-600 bg-gray-900 text-white hover:bg-gray-700 transition-colors font-bold text-lg"
+        aria-label="Admin access"
+        title="Admin Mode">
+        ⚙️
+      </button>
+      <button 
+        type="button" 
         onclick="openModal()" 
         class="px-4 py-2 rounded-lg border border-gray-600 bg-gray-900 text-white hover:bg-gray-700 transition-colors font-bold text-lg"
         aria-label="Add new application"
@@ -80,7 +88,7 @@
   <section class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6" id="apps-grid" aria-label="Applications grid">
   <% @webapps.each do |app| %>
     <article 
-      class="card border border-gray-600 rounded-lg p-3 sm:p-6 bg-gray-800 text-white text-center hover:bg-gray-700 transition-colors flex flex-col cursor-pointer" 
+      class="card border border-gray-600 rounded-lg p-3 sm:p-6 bg-gray-800 text-white text-center hover:bg-gray-700 transition-colors flex flex-col cursor-pointer relative" 
       data-app-id="<%= app.id %>" 
       data-app-name="<%= app.name %>" 
       data-app-url="<%= app.url %>" 
@@ -91,6 +99,16 @@
       tabindex="0"
       aria-label="<%= app.name %> - <%= app.category&.humanize || 'Uncategorized' %>"
       onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showAppDetailsModal(this)}">
+      
+      <!-- Delete Button (hidden by default, shown in admin mode) -->
+      <button 
+        class="delete-btn hidden absolute top-2 right-2 w-6 h-6 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center text-xs font-bold z-10"
+        onclick="event.stopPropagation(); omarchyApp.deleteApp('<%= app.id %>', '<%= app.name %>')"
+        aria-label="Delete <%= app.name %>"
+        title="Delete <%= app.name %>">
+        ×
+      </button>
+      
       <div class="flex-1 flex flex-col justify-center items-center">
         <img 
           src="<%= app.icon_url %>" 
