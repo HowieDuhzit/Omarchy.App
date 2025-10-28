@@ -103,7 +103,7 @@
       <!-- Delete Button (hidden by default, shown in admin mode) -->
       <button 
         class="delete-btn hidden absolute top-2 right-2 w-6 h-6 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center text-xs font-bold z-10"
-        onclick="event.stopPropagation(); omarchyApp.deleteApp('<%= app.id %>', '<%= app.name %>')"
+        onclick="event.stopPropagation(); deleteApp('<%= app.id %>', '<%= app.name %>')"
         aria-label="Delete <%= app.name %>"
         title="Delete <%= app.name %>">
         ×

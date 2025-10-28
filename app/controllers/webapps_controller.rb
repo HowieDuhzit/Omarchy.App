@@ -3,7 +3,7 @@ class WebappsController < ApplicationController
   before_action :authenticate_admin!, only: %i[ update destroy ]
   before_action :set_admin_password
   skip_before_action :authenticate_admin!, only: [:authenticate_admin]
-  skip_before_action :verify_authenticity_token, only: [:authenticate_admin, :destroy]
+  skip_before_action :verify_authenticity_token, only: [:authenticate_admin, :destroy, :create]
 
   def index
     @webapps = Webapp.order(:name)

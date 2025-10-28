@@ -293,6 +293,8 @@ let omarchyApp;
 
 document.addEventListener('DOMContentLoaded', () => {
   omarchyApp = new OmarchyApp();
+  // Make omarchyApp globally accessible
+  window.omarchyApp = omarchyApp;
 });
 
 // Global functions for backward compatibility
@@ -326,6 +328,10 @@ function closeAdminModal() {
 
 function closeAppDetailsModal() {
   omarchyApp?.closeModal('appDetailsModal');
+}
+
+function deleteApp(appId, appName) {
+  omarchyApp?.deleteApp(appId, appName);
 }
 
 function authenticateAdmin() {
