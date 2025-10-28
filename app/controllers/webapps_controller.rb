@@ -14,7 +14,7 @@ class WebappsController < ApplicationController
     @webapps = apply_sort(@webapps)
     
     # Add pagination for large datasets
-    @webapps = @webapps.limit(100) if @webapps.count > 100
+    @webapps = @webapps.limit(100) if @webapps.count > 100 && !params[:search].present?
     
     respond_to do |format|
       format.html
