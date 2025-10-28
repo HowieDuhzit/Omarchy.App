@@ -184,10 +184,10 @@
                        <div class="text-gray-300">#!/bin/bash</div>
                        <div class="text-gray-300">set -e</div>
                        <div class="text-gray-300">B="https://raw.githubusercontent.com/HowieDuhzit/omarchy/refs/heads/ChromiumWebAppInstaller"</div>
-                       <div class="text-gray-300">mkdir -p ~/.local/{bin,share/{applications,mime/packages}}</div>
-                       <div class="text-gray-300">curl -s "$B/bin/omarchy-install-handler" -o ~/.local/bin/omarchy-install-handler</div>
+                       <div class="text-gray-300">mkdir -p ~/.local/share/{omarchy/bin,applications,mime/packages}</div>
+                       <div class="text-gray-300">curl -s "$B/bin/omarchy-install-handler" -o ~/.local/share/omarchy/bin/omarchy-install-handler</div>
                        <div class="text-gray-300">curl -s "$B/applications/omarchy-install-handler.desktop" -o ~/.local/share/applications/omarchy-install-handler.desktop</div>
-                       <div class="text-gray-300">chmod +x ~/.local/bin/omarchy-install-handler</div>
+                       <div class="text-gray-300">chmod +x ~/.local/share/omarchy/bin/omarchy-install-handler</div>
                        <div class="text-gray-300">echo '<?xml version="1.0"?><mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info"><mime-type type="x-scheme-handler/omarchy"><comment>Omarchy Installer</comment><glob pattern="omarchy:*"/></mime-type></mime-info>' > ~/.local/share/mime/packages/omarchy.xml 2>/dev/null</div>
                        <div class="text-gray-300">xdg-mime default omarchy-install-handler.desktop x-scheme-handler/omarchy</div>
                        <div class="text-gray-300">update-desktop-database ~/.local/share/applications 2>/dev/null</div>

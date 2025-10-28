@@ -8,8 +8,8 @@
   </li>
   <li>Register handler:
 <pre>chmod +x ~/Downloads/omarchy-install-handler
-mkdir -p ~/.local/bin ~/.local/share/applications
-mv ~/Downloads/omarchy-install-handler ~/.local/bin/
+mkdir -p ~/.local/share/omarchy/bin ~/.local/share/applications
+mv ~/Downloads/omarchy-install-handler ~/.local/share/omarchy/bin/
 mv ~/Downloads/omarchy-install-handler.desktop ~/.local/share/applications/
 xdg-mime default omarchy-install-handler.desktop x-scheme-handler/omarchy
 update-desktop-database ~/.local/share/applications || true</pre>

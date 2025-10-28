@@ -22,7 +22,7 @@ INSTALL_HANDLER_URL="$GITHUB_BASE/bin/omarchy-install-handler"
 DESKTOP_FILE_URL="$GITHUB_BASE/applications/omarchy-install-handler.desktop"
 
 # Local directories
-LOCAL_BIN="$HOME/.local/bin"
+LOCAL_BIN="$HOME/.local/share/omarchy/bin"
 LOCAL_APPS="$HOME/.local/share/applications"
 LOCAL_MIME="$HOME/.local/share/mime/packages"
 
