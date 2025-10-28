@@ -1,6 +1,6 @@
 # Omarchy Directory (Rails + PostgreSQL)
 
-A minimal Rails app that lists webapps and supports one-click installs via the `omarchy://` URL scheme, calling your local `omarchy-webapp-install` script.
+A minimal Rails app that lists webapps and supports one-click installs via the `omarchy://` URL scheme, calling your local `omarchy-install-handler` script.
 
 ## Quick Start
 

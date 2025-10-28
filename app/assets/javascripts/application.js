@@ -149,15 +149,8 @@ class OmarchyApp {
       if (element) {
         if (id === 'modalAppIcon') {
           element.src = value;
-        } else if (id === 'modalAppOpenLink') {
+        } else if (id === 'modalAppOpenLink' || id === 'modalAppInstallLink') {
           element.href = value;
-        } else if (id === 'modalAppInstallLink') {
-          // Handle install link with JavaScript to properly handle omarchy:// protocol
-          element.href = '#';
-          element.onclick = (e) => {
-            e.preventDefault();
-            this.handleInstallClick(appData);
-          };
         } else {
           element.textContent = value;
         }
@@ -168,83 +161,6 @@ class OmarchyApp {
   formatCategory(category) {
     return category.charAt(0).toUpperCase() + 
            category.slice(1).replace('_', ' ');
-  }
-
-  // Handle install click to properly handle omarchy:// protocol
-  async handleInstallClick(appData) {
-    try {
-      // First, get the install URI from the server
-      const response = await fetch(`/webapps/${appData.id}/install`, {
-        method: 'GET',
-        redirect: 'manual' // Don't follow redirects automatically
-      });
-      
-      if (response.status === 302 || response.status === 301) {
-        // Get the redirect URL (omarchy://...)
-        const installUrl = response.headers.get('Location');
-        
-        if (installUrl && installUrl.startsWith('omarchy://')) {
-          // Try multiple methods to open the omarchy:// URL
-          let opened = false;
-          
-          // Method 1: Try window.location.href
-          try {
-            window.location.href = installUrl;
-            opened = true;
-          } catch (e) {
-            console.log('Method 1 failed:', e);
-          }
-          
-          // Method 2: Try creating a temporary link and clicking it
-          if (!opened) {
-            try {
-              const tempLink = document.createElement('a');
-              tempLink.href = installUrl;
-              tempLink.style.display = 'none';
-              document.body.appendChild(tempLink);
-              tempLink.click();
-              document.body.removeChild(tempLink);
-              opened = true;
-            } catch (e) {
-              console.log('Method 2 failed:', e);
-            }
-          }
-          
-          // Method 3: Try using a hidden iframe
-          if (!opened) {
-            try {
-              const iframe = document.createElement('iframe');
-              iframe.style.display = 'none';
-              iframe.src = installUrl;
-              document.body.appendChild(iframe);
-              setTimeout(() => document.body.removeChild(iframe), 1000);
-              opened = true;
-            } catch (e) {
-              console.log('Method 3 failed:', e);
-            }
-          }
-          
-          if (opened) {
-            // Show success message
-            this.showNotification(`${appData.name} installation initiated!`, 'success');
-            
-            // Close the modal after a short delay
-            setTimeout(() => {
-              this.closeModal('appDetailsModal');
-            }, 1500);
-          } else {
-            throw new Error('Could not open install URL');
-          }
-        } else {
-          throw new Error('Invalid install URL received');
-        }
-      } else {
-        throw new Error('Unexpected response from server');
-      }
-    } catch (error) {
-      console.error('Install error:', error);
-      this.showNotification('Failed to install app. Please try again.', 'error');
-    }
   }
 
   // Admin Functions

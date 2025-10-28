@@ -9,4 +9,4 @@
   </div>
 
 <h3>CLI fallback</h3>
-<pre>omarchy-webapp-install "<%= @webapp.name %>" "<%= @webapp.url %>" "<%= @webapp.icon_url %>"</pre>
+<pre>omarchy-install-handler "omarchy://webappinstall?name=<%= URI.encode_www_form_component(@webapp.name) %>&url=<%= URI.encode_www_form_component(@webapp.url) %>&icon=<%= URI.encode_www_form_component(@webapp.icon_url) %>"</pre>
