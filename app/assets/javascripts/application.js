@@ -233,8 +233,22 @@ class OmarchyApp {
         });
 
         if (response.ok) {
+          // Remove the app card from DOM instead of reloading
+          const appCard = document.querySelector(`[data-app-id="${appId}"]`);
+          if (appCard) {
+            // Add fade out animation
+            appCard.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out';
+            appCard.style.opacity = '0';
+            appCard.style.transform = 'scale(0.8)';
+            
+            // Remove from DOM after animation
+            setTimeout(() => {
+              appCard.remove();
+              this.updateResultsCounter();
+            }, 300);
+          }
+          
           this.showNotification(`"${appName}" deleted successfully`, 'success');
-          setTimeout(() => location.reload(), 1000);
         } else {
           throw new Error('Delete failed');
         }
@@ -242,6 +256,15 @@ class OmarchyApp {
         console.error('Error deleting app:', error);
         this.showNotification('Failed to delete app', 'error');
       }
+    }
+  }
+
+  // Update results counter after deletion
+  updateResultsCounter() {
+    const resultsCounter = document.getElementById('results-counter');
+    if (resultsCounter) {
+      const visibleCards = document.querySelectorAll('.card:not([style*="display: none"])');
+      resultsCounter.textContent = `${visibleCards.length} apps found`;
     }
   }
 
