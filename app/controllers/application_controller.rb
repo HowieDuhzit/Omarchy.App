@@ -21,7 +21,8 @@ class ApplicationController < ActionController::Base
     response.headers['X-XSS-Protection'] = '1; mode=block'
     response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
     response.headers['Permissions-Policy'] = 'geolocation=(), microphone=(), camera=()'
-    response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains' if request.ssl?
+    # Only set HSTS in production with SSL
+    response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains' if Rails.env.production? && request.ssl?
   end
   
   def handle_error(exception)

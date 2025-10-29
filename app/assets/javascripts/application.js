@@ -151,6 +151,13 @@ class OmarchyApp {
           element.src = value;
         } else if (id === 'modalAppOpenLink' || id === 'modalAppInstallLink') {
           element.href = value;
+          // Add click handler for install link to provide fallback
+          if (id === 'modalAppInstallLink') {
+            element.onclick = (e) => {
+              e.preventDefault();
+              this.handleInstallClick(appData);
+            };
+          }
         } else {
           element.textContent = value;
         }
@@ -161,6 +168,33 @@ class OmarchyApp {
   formatCategory(category) {
     return category.charAt(0).toUpperCase() + 
            category.slice(1).replace('_', ' ');
+  }
+
+  handleInstallClick(appData) {
+    // Try to navigate to the install URI
+    const installUrl = `/webapps/${appData.id}/install`;
+    
+    // Create a temporary link to trigger the install
+    const tempLink = document.createElement('a');
+    tempLink.href = installUrl;
+    tempLink.target = '_blank';
+    document.body.appendChild(tempLink);
+    tempLink.click();
+    document.body.removeChild(tempLink);
+    
+    // Show a helpful message after a short delay
+    setTimeout(() => {
+      this.showInstallInstructions(appData);
+    }, 1000);
+  }
+
+  showInstallInstructions(appData) {
+    const message = `Installing ${appData.name}...\n\n` +
+      `If the installation didn't start automatically, you may need to:\n` +
+      `1. Run the Omarchy installer script (click the ? button for instructions)\n` +
+      `2. Or manually install the app by visiting: ${appData.url}`;
+    
+    this.showNotification(message, 'info');
   }
 
   // Admin Functions
@@ -271,12 +305,28 @@ class OmarchyApp {
   // Notification System
   showNotification(message, type = 'info') {
     const notification = document.createElement('div');
-    notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white font-semibold z-50 transition-all duration-300 ${
+    notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white font-semibold z-50 transition-all duration-300 max-w-md ${
       type === 'success' ? 'bg-green-600' : 
       type === 'error' ? 'bg-red-600' : 
       'bg-blue-600'
     }`;
-    notification.textContent = message;
+    
+    // Handle multi-line messages
+    if (message.includes('\n')) {
+      const lines = message.split('\n');
+      const content = document.createElement('div');
+      lines.forEach(line => {
+        const div = document.createElement('div');
+        div.textContent = line;
+        if (line.trim() === '') {
+          div.style.height = '0.5rem';
+        }
+        content.appendChild(div);
+      });
+      notification.appendChild(content);
+    } else {
+      notification.textContent = message;
+    }
     
     document.body.appendChild(notification);
     
@@ -284,7 +334,7 @@ class OmarchyApp {
       notification.style.opacity = '0';
       notification.style.transform = 'translateX(100%)';
       setTimeout(() => notification.remove(), 300);
-    }, 3000);
+    }, 5000); // Longer timeout for install instructions
   }
 }
 

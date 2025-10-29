@@ -34,6 +34,11 @@ FROM base AS development
 ENV BUNDLE_WITHOUT=""
 COPY Gemfile Gemfile.lock ./
 RUN bundle install
+COPY . .
+RUN mkdir -p tmp/pids log public/assets db
+RUN chmod +x bin/rails bin/rake || true
+EXPOSE 3000
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000"]
 
 # Build stage
 FROM base AS build

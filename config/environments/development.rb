@@ -8,5 +8,8 @@ Rails.application.configure do
   config.active_record.migration_error = :page_load
   config.active_record.verbose_query_logs = true
   config.hosts.clear
+  
+  # Disable SSL for local development
+  config.force_ssl = false
 end
 

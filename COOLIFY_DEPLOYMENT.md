@@ -171,3 +171,6 @@ docker logs <container_name>
 For Coolify-specific issues, refer to the [Coolify documentation](https://coolify.io/docs/knowledge-base/docker/compose) or the Coolify community support channels.
 
 
+
+
+
